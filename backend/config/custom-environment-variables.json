@@ -1,0 +1,6 @@
+{
+    "PORT": "PORT",
+    "locationFinderKey": "locationFinderKey",
+    "smsToken": "smsToken",
+    "useAuth": "useAuth"
+}
