@@ -3,5 +3,5 @@
   "locationFinderKey": "locationFinderKey",
   "smsToken": "smsToken",
   "useAuth": "useAuth",
-  "CLOUDINARY_URL": "CLOUDINARY_URL"
+  "appUrl": "appUrl"
 }

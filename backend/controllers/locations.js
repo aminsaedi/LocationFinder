@@ -1,4 +1,5 @@
 const fs = require("fs");
+const config = require("config");
 
 const { LocationsModel } = require("../models/locations");
 
@@ -10,6 +11,14 @@ exports.getAllLocationsInCity = async (req, res) => {
     .select("-__v");
   if (!locations || locations.length <= 0)
     return res.status(404).send({ message: "هیچ مکانی در این شهر پیدا نشد" });
+  let imageUrls = [];
+  locations.forEach((location) => {
+    location.images.forEach((image) =>
+      imageUrls.push(config.get("appUrl") + image)
+    );
+    location.images = imageUrls;
+    imageUrls = [];
+  });
   return res.status(200).send(locations);
 };
 
@@ -24,6 +33,9 @@ exports.getLocationById = async (req, res) => {
   } catch (error) {
     return res.status(400).send({ message: "خطا در پیدا کردنه لوکیشن" });
   }
+  location.images.forEach((image, imageIndex) => {
+    location.images[imageIndex] = config.get("appUrl") + image;
+  });
   return res.status(200).send(location);
 };
 
@@ -43,7 +55,7 @@ exports.postNewLocation = async (req, res) => {
           image.data,
           (err) => console.log(err)
         );
-        imageNames.push(name);
+        imageNames.push(`${name}.${image.mimetype.split("/")[1]}`);
       }
     });
   if (!req.body.city || !req.body.location)
@@ -133,6 +145,14 @@ exports.getUserCreatedLocations = async (req, res) => {
       .status(400)
       .send({ message: "خطا در دریافت مکان های ایجاد شده توسط شما" });
   }
+  let imageUrls = [];
+  locations.forEach((location) => {
+    location.images.forEach((image) =>
+      imageUrls.push(config.get("appUrl") + image)
+    );
+    location.images = imageUrls;
+    imageUrls = [];
+  });
   return res.status(200).send(locations);
 };
 

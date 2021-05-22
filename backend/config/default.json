@@ -3,5 +3,5 @@
   "locationFinderKey": "testKey",
   "smsToken": "smsToken",
   "useAuth": true,
-  "CLOUDINARY_URL" : "cloudinary://812787752934915:XqVL6aTq7fwc2-owFxVmGePqdhc@drta001hj"
+  "appUrl": "http://localhost:9000/"
 }
