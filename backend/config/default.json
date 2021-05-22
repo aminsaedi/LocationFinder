@@ -2,5 +2,6 @@
   "PORT": "9000",
   "locationFinderKey": "testKey",
   "smsToken": "smsToken",
-  "useAuth": false
+  "useAuth": true,
+  "CLOUDINARY_URL" : "cloudinary://812787752934915:XqVL6aTq7fwc2-owFxVmGePqdhc@drta001hj"
 }
