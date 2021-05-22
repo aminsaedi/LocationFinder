@@ -41,6 +41,11 @@ const LocationsSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
   },
+  catagories: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "catagories",
+    required: true,
+  },
 });
 
 const LocationsModel = mongoose.model("locations", LocationsSchema);

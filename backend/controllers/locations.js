@@ -7,7 +7,7 @@ exports.getAllLocationsInCity = async (req, res) => {
   if (!req.params.city)
     return res.status(400).send({ message: "شهر نامشخص است" });
   const locations = await LocationsModel.find({ city: req.params.city })
-    .populate("createdBy", "-password -__v")
+    .populate("createdBy catagories", "-password -__v")
     .select("-__v");
   if (!locations || locations.length <= 0)
     return res.status(404).send({ message: "هیچ مکانی در این شهر پیدا نشد" });
@@ -26,7 +26,7 @@ exports.getLocationById = async (req, res) => {
   let location;
   try {
     location = await LocationsModel.findById(req.params.id).populate(
-      "createdBy likes comments.userId",
+      "createdBy likes comments.userId catagories",
       "-password -__v"
     );
     if (!location) return res.status(404).send({ message: "لوکیشن پیدا نشد" });
@@ -46,6 +46,7 @@ exports.postNewLocation = async (req, res) => {
   const name = req.body.name;
   const address = req.body.address;
   const description = req.body.description;
+  const catagories = req.body.catagories;
   req.files.images &&
     req.files.images.forEach((image) => {
       if (image.mimetype.includes("image/") && image.size <= 3000000) {
@@ -69,6 +70,7 @@ exports.postNewLocation = async (req, res) => {
       city: req.body.city,
       location: req.body.location,
       createdBy: req.user._id,
+      catagories,
     });
     await location.save();
     return res.status(200).send(location);
@@ -137,7 +139,9 @@ exports.deleteDeleteLocation = async (req, res) => {
 exports.getUserCreatedLocations = async (req, res) => {
   let locations;
   try {
-    locations = await LocationsModel.find({ createdBy: req.user._id });
+    locations = await LocationsModel.find({ createdBy: req.user._id }).populate(
+      "catagories"
+    );
     if (locations.length <= 0)
       return res.status(404).send({ message: "شما مکانی ایجاد نکرده اید" });
   } catch (error) {
