@@ -47,18 +47,35 @@ exports.postNewLocation = async (req, res) => {
   const address = req.body.address;
   const description = req.body.description;
   const catagories = req.body.catagories;
-  req.files.images &&
-    req.files.images.forEach((image) => {
-      if (image.mimetype.includes("image/") && image.size <= 3000000) {
-        const name = `${req.user._id}__${Date.now()}`;
-        fs.writeFile(
-          `./public/${name}.${image.mimetype.split("/")[1]}`,
-          image.data,
-          (err) => console.log(err)
+  for (const image of req.files.images) {
+    if (image.mimetype.includes("image/") && image.size <= 3000000) {
+      console.log(image)
+      const name = `${req.body.name}__${req.user._id}__${image.md5}`;
+      fs.writeFile(
+        `./public/${name}.${image.mimetype.split("/")[1]}`,
+        image.data,
+        (err) => {
+          if (!err) return;
+          else console.log(err)
+        }
         );
         imageNames.push(`${name}.${image.mimetype.split("/")[1]}`);
-      }
-    });
+
+      // await sleep(1)
+    }
+  }
+  // req.files.images &&
+  //   req.files.images.forEach(async (image) => {
+  //     if (image.mimetype.includes("image/") && image.size <= 3000000) {
+  //       const name = `${req.user._id}__${Date.now()}`;
+  //       const resultSave = await fs.writeFile(
+  //         `./public/${name}.${image.mimetype.split("/")[1]}`,
+  //         image.data
+  //       );
+  //       console.log(resultSave);
+  //       imageNames.push(`${name}.${image.mimetype.split("/")[1]}`);
+  //     }
+  //   });
   if (!req.body.city || !req.body.location)
     return res.status(400).send({ message: "لوکیشن و شهر مکان نامشخص است" });
   try {
